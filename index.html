@@ -1367,18 +1367,58 @@
             background: rgba(255, 255, 255, 0.08);
         }
 
-        /* Removendo estilos do botão de mutar */
-        .mute-button {
+        /* Add these new styles */
+        .audio-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .audio-control:hover {
+            transform: scale(1.1);
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .audio-control i {
+            color: var(--primary-color);
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .audio-control.muted i.fa-volume-up {
+            display: none;
+        }
+
+        .audio-control:not(.muted) i.fa-volume-mute {
             display: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="content">
-            <div class="logo-container">
-                <img src="logo.png" alt="AUDAZ WEAR" class="logo">
-            </div>
+    <video id="backgroundVideo" 
+           autoplay 
+           muted 
+           loop 
+           playsinline 
+           style="position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; width: auto; height: auto; z-index: -1; object-fit: cover;"
+           preload="auto">
+        <source src="video.mp4" type="video/mp4">
+    </video>
+
+    <div class="content-wrapper">
+        <div class="content-container">
             <!-- Countdown Section -->
             <section class="countdown-section">
                 <div class="countdown-title">Prepare-se para uma Audaz nunca antes vista</div>
@@ -1540,9 +1580,11 @@
         </div>
     </div>
 
-    <video id="backgroundVideo" autoplay muted loop playsinline style="position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; width: auto; height: auto; z-index: -1; object-fit: cover;">
-        <source src="video.mp4" type="video/mp4">
-    </video>
+    <!-- Audio control stays on top -->
+    <div class="audio-control" id="audioControl" style="z-index: 1000;">
+        <i class="fas fa-volume-mute"></i>
+        <i class="fas fa-volume-up"></i>
+    </div>
 
     <!-- Modal stays on top -->
     <div id="resultModal" class="modal" style="z-index: 1001;">
@@ -1555,6 +1597,33 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Audio control functionality
+            const audioControl = document.getElementById('audioControl');
+            const video = document.getElementById('backgroundVideo');
+            
+            // Try to start with unmuted video
+            video.muted = false;
+            video.play().catch(function(error) {
+                console.log("Video play failed:", error);
+                // If autoplay with sound fails, mute the video and update UI
+                video.muted = true;
+                audioControl.classList.add('muted');
+            });
+
+            audioControl.addEventListener('click', function() {
+                if (video.muted) {
+                    video.muted = false;
+                    audioControl.classList.remove('muted');
+                    video.play().catch(function(error) {
+                        console.log("Video play failed:", error);
+                        alert('Clique em "OK" para ativar o som. Alguns navegadores exigem interação do usuário para reproduzir áudio.');
+                    });
+                } else {
+                    video.muted = true;
+                    audioControl.classList.add('muted');
+                }
+            });
+
             // Update content visibility delay to 4 seconds
             setTimeout(() => {
                 document.querySelector('.content-container').classList.add('visible');
@@ -1867,38 +1936,69 @@
                    (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
         }
 
-        // Função para iniciar o vídeo automaticamente
+        // Função para iniciar o vídeo automaticamente em dispositivos móveis
         function setupVideo() {
             const video = document.getElementById('backgroundVideo');
-            if (video) {
-                video.muted = true;
-                const playPromise = video.play();
-                
-                if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        console.log("Autoplay failed:", error);
-                        // Tenta iniciar o vídeo quando houver interação do usuário
-                        document.addEventListener('click', function startVideo() {
-                            video.play();
-                            document.removeEventListener('click', startVideo);
-                        }, { once: true });
-                    });
-                }
+            if (isMobileDevice()) {
+                video.muted = true; // Necessário para autoplay em dispositivos móveis
+                video.play().catch(function(error) {
+                    console.log("Autoplay failed:", error);
+                });
             }
         }
 
-        // Iniciar o vídeo assim que o documento estiver pronto
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', setupVideo);
-        } else {
+        // Executar quando o documento estiver carregado
+        document.addEventListener('DOMContentLoaded', function() {
             setupVideo();
+            
+            // Reajustar quando a orientação mudar (para dispositivos móveis)
+            window.addEventListener('orientationchange', function() {
+                setupVideo();
+            });
+        });
+
+        // Função para garantir que o vídeo inicie automaticamente
+        function ensureVideoAutoplay() {
+            const video = document.getElementById('backgroundVideo');
+            
+            // Configurações para garantir autoplay
+            video.muted = true; // Necessário para autoplay em todos os dispositivos
+            video.playsInline = true;
+            
+            // Tentar iniciar o vídeo
+            const playPromise = video.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // Autoplay iniciado com sucesso
+                    console.log('Autoplay started successfully');
+                }).catch(error => {
+                    // Se falhar, tentar novamente com interação do usuário
+                    console.log('Autoplay failed:', error);
+                    document.addEventListener('click', function startVideo() {
+                        video.play();
+                        document.removeEventListener('click', startVideo);
+                    }, { once: true });
+                });
+            }
         }
 
-        // Tentar iniciar o vídeo novamente quando a página estiver completamente carregada
-        window.addEventListener('load', setupVideo);
+        // Executar quando o documento estiver carregado
+        document.addEventListener('DOMContentLoaded', function() {
+            ensureVideoAutoplay();
+            
+            // Reajustar quando a orientação mudar
+            window.addEventListener('orientationchange', function() {
+                ensureVideoAutoplay();
+            });
 
-        // Tentar iniciar o vídeo quando a orientação mudar
-        window.addEventListener('orientationchange', setupVideo);
+            // Reajustar quando a visibilidade da página mudar
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    ensureVideoAutoplay();
+                }
+            });
+        });
     </script>
 </body>
 </html>
