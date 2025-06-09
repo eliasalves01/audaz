@@ -109,8 +109,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
             object-fit: cover;
+            z-index: -1;
+            /* Melhorias para iOS e Android */
+            -webkit-playsinline: true;
+            -webkit-video-playable-inline: true;
+            -webkit-media-controls: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .overlay {
@@ -1404,16 +1411,17 @@
         .audio-control:not(.muted) i.fa-volume-mute {
             display: none;
         }
+
+        /* Fallback para dispositivos que não suportam vídeo */
+        @media (max-width: 768px) {
+            .video-background {
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
-    <video id="backgroundVideo" 
-           autoplay 
-           muted 
-           loop 
-           playsinline 
-           style="position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; width: auto; height: auto; z-index: -1; object-fit: cover;"
-           preload="auto">
+    <video class="video-background" autoplay loop playsinline muted id="backgroundVideo">
         <source src="video.mp4" type="video/mp4">
     </video>
 
@@ -1814,33 +1822,26 @@
 
         // Modal functionality
         function showPrizeModal(prize) {
-            const modal = document.createElement('div');
-            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px);';
-            modal.innerHTML = `
-                <div class="modal-content" style="background: linear-gradient(135deg, #1a1a1a, #2a2a2a); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 2rem; text-align: center; max-width: 400px; width: 90%; position: relative;">
-                    <button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;">×</button>
+            const modal = document.getElementById('resultModal');
+            const message = document.getElementById('modalMessage');
+            
+            // Create a more detailed modal content with prize image
+            message.innerHTML = `
+                <div style="text-align: center; padding: 1rem;">
                     <div style="background: rgba(255, 255, 255, 0.1); padding: 2rem; border-radius: 15px; margin: 1rem 0; border: 1px solid rgba(255, 255, 255, 0.2);">
                         <div style="margin-bottom: 1.5rem;">
                             <div class="modal-prize-container">
                                 <img src="${prize.image}" alt="${prize.text}" class="modal-prize-image">
                             </div>
                         </div>
-                        <div style="font-size: 1.8rem; font-weight: bold; color: #fff; margin-bottom: 0.8rem; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);">
-                            ${prize.text}
-                        </div>
-                        <div style="font-size: 1.1rem; color: rgba(255, 255, 255, 0.9); margin-bottom: 0.5rem;">
-                            🎁 Seu prêmio será enviado por e-mail!
-                        </div>
-                        <div style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7);">
-                            📧 Verifique sua caixa de entrada
-                        </div>
-                    </div>
-                    <div style="font-size: 1rem; color: rgba(255, 255, 255, 0.8); margin-top: 1.5rem; font-style: italic;">
-                        Obrigado por participar do lançamento da AUDAZ WEAR! 🚀
+                        <h3 style="color: #fff; margin-bottom: 1rem;">Parabéns!</h3>
+                        <p style="color: #fff; font-size: 1.2rem;">Você ganhou:</p>
+                        <p style="color: #fff; font-size: 1.5rem; font-weight: bold; margin-top: 0.5rem;">${prize.text}</p>
                     </div>
                 </div>
             `;
-            document.body.appendChild(modal);
+            
+            modal.style.display = 'flex';
         }
 
         function closeModal() {
@@ -1930,72 +1931,64 @@
         document.getElementById('spinButton').addEventListener('click', spinWheel);
         document.getElementById('modalButton').addEventListener('click', closeModal);
 
-        // Função para detectar se é dispositivo móvel
-        function isMobileDevice() {
-            return (window.innerWidth <= 768) || 
-                   (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-        }
-
-        // Função para iniciar o vídeo automaticamente em dispositivos móveis
-        function setupVideo() {
-            const video = document.getElementById('backgroundVideo');
-            if (isMobileDevice()) {
-                video.muted = true; // Necessário para autoplay em dispositivos móveis
-                video.play().catch(function(error) {
-                    console.log("Autoplay failed:", error);
-                });
-            }
-        }
-
-        // Executar quando o documento estiver carregado
+        // Script para garantir que o vídeo funcione no iOS e Android
         document.addEventListener('DOMContentLoaded', function() {
-            setupVideo();
-            
-            // Reajustar quando a orientação mudar (para dispositivos móveis)
-            window.addEventListener('orientationchange', function() {
-                setupVideo();
-            });
-        });
-
-        // Função para garantir que o vídeo inicie automaticamente
-        function ensureVideoAutoplay() {
             const video = document.getElementById('backgroundVideo');
             
-            // Configurações para garantir autoplay
-            video.muted = true; // Necessário para autoplay em todos os dispositivos
-            video.playsInline = true;
+            // Detecta se é dispositivo móvel
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
             
-            // Tentar iniciar o vídeo
-            const playPromise = video.play();
-            
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    // Autoplay iniciado com sucesso
-                    console.log('Autoplay started successfully');
-                }).catch(error => {
-                    // Se falhar, tentar novamente com interação do usuário
+            // Função para tentar reproduzir o vídeo
+            function playVideo() {
+                video.play().catch(function(error) {
                     console.log('Autoplay failed:', error);
-                    document.addEventListener('click', function startVideo() {
+                    // Se falhar, tenta novamente após interação do usuário
+                    document.addEventListener('click', function() {
                         video.play();
-                        document.removeEventListener('click', startVideo);
                     }, { once: true });
                 });
             }
-        }
-
-        // Executar quando o documento estiver carregado
-        document.addEventListener('DOMContentLoaded', function() {
-            ensureVideoAutoplay();
             
-            // Reajustar quando a orientação mudar
-            window.addEventListener('orientationchange', function() {
-                ensureVideoAutoplay();
+            // Configurações específicas para iOS
+            if (isIOS) {
+                video.setAttribute('playsinline', 'true');
+                video.setAttribute('webkit-playsinline', 'true');
+                video.muted = true; // iOS requer muted para autoplay
+                
+                // Remove muted após interação do usuário
+                document.addEventListener('touchstart', function() {
+                    video.muted = false;
+                    playVideo();
+                }, { once: true });
+            }
+            
+            // Configurações específicas para Android
+            if (isMobile && !isIOS) {
+                video.muted = false;
+                video.volume = 0.5;
+            }
+            
+            // Tenta reproduzir imediatamente
+            playVideo();
+            
+            // Para dispositivos iOS, remove o muted após um delay
+            setTimeout(function() {
+                if (!isIOS) {
+                    video.muted = false;
+                    playVideo();
+                }
+            }, 1000);
+            
+            // Adiciona listener para quando o vídeo terminar
+            video.addEventListener('ended', function() {
+                video.play();
             });
-
-            // Reajustar quando a visibilidade da página mudar
-            document.addEventListener('visibilitychange', function() {
-                if (!document.hidden) {
-                    ensureVideoAutoplay();
+            
+            // Listener para quando o vídeo é pausado
+            video.addEventListener('pause', function() {
+                if (!video.ended) {
+                    video.play();
                 }
             });
         });
