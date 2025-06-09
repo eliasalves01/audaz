@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roleta de Prêmios - Lançamento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Update font imports */
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Merienda:wght@300..900&family=Rock+Salt&family=Shadows+Into+Light&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+
+        :root {
+            --primary-color: #ffffff;
+            --secondary-color: #000000;
+            --gradient-overlay: linear-gradient(45deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.75) 100%);
+            --success-color: #4CAF50;
+            --error-color: #f44336;
+            --font-dancing: 'Dancing Script', cursive;
+            --font-shadows: 'Shadows Into Light', cursive;
+            --font-rock: 'Rock Salt', cursive;
+            --font-merienda: 'Merienda', cursive;
+            --dark-bg: #000000;
+            --card-bg: #111111;
+            --text-light: #ffffff;
+            --text-dark: #000000;
+            --accent-color: #333333;
+            --section-gradient: linear-gradient(45deg, #ffffff, #f0f0f0);
+        }
+
+        /* Main content wrapper with gradient */
+        .content-wrapper {
+            position: relative;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        .content-wrapper::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-overlay);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Ensure content stays above gradient */
+        .content-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Remove individual section backgrounds */
+        .countdown-section,
+        .hero-section,
+        .presentation-section,
+        .highlights-section,
+        .form-section,
+        .wheel-section,
+        footer {
+            background: transparent;
+            backdrop-filter: blur(5px);
+        }
+
+        .countdown-item,
+        .hero-content,
+        .highlight-item,
+        .form-container,
+        .wheel-container,
+        .wheel,
+        .wheel-item,
+        .modal-content,
+        .social-links a {
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(10px);
+            /* border: 1px solid rgba(255, 255, 255, 0.1); */
+        }
+
+        /* Update body structure */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #000000;
+            color: var(--primary-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Video Background */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            object-fit: cover;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-overlay);
+            z-index: -1;
+        }
+
+        /* Content Container */
+        .content-container {
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .content-container.visible {
+            opacity: 1;
+        }
+
+        /* Update existing sections to be inside content-container */
+        .countdown-section,
+        .hero-section,
+        .presentation-section,
+        .highlights-section,
+        .form-section,
+        .wheel-section,
+        footer {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+            position: relative;
+            margin: 2rem auto;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-container.visible .countdown-section,
+        .content-container.visible .hero-section,
+        .content-container.visible .presentation-section,
+        .content-container.visible .highlights-section,
+        .content-container.visible .form-section,
+        .content-container.visible .wheel-section,
+        .content-container.visible footer {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Add delay for each section */
+        .content-container.visible .countdown-section { transition-delay: 0.8s; }
+        .content-container.visible .hero-section { transition-delay: 1.2s; }
+        .content-container.visible .presentation-section { transition-delay: 1.6s; }
+        .content-container.visible .highlights-section { transition-delay: 2.0s; }
+        .content-container.visible .form-section { transition-delay: 2.4s; }
+        .content-container.visible .wheel-section { transition-delay: 2.8s; }
+        .content-container.visible footer { transition-delay: 3.2s; }
+
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Countdown Section */
+        .countdown-section {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .countdown-title {
+            font-family: var(--font-merienda);
+            font-size: 3.5rem;
+            font-weight: 600;
+            margin-bottom: 2.5rem;
+            line-height: 1.3;
+            color: var(--primary-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .countdown {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            padding: 2rem;
+            border-radius: 15px;
+            min-width: 150px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            font-family: var(--font-merienda);
+        }
+
+        .countdown-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .countdown-item span {
+            display: block;
+        }
+
+        .countdown-item span:first-child {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .countdown-item span:last-child {
+            font-size: 0.5rem;
+            font-weight: 500;
+        }
+
+        .countdown-item .countdown-number {
+            font-family: var(--font-merienda);
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .countdown-item .countdown-label {
+            font-family: var(--font-merienda);
+            font-size: 1.2rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            width: 100%;
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-family: var(--font-merienda);
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(45deg, #fff, #ccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-dancing);
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Presentation Section */
+        .presentation-section {
+            width: 100%;
+            padding: 4rem 2rem;
+        }
+
+        .presentation-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .presentation-content p {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        /* Highlights Section */
+        .highlights-section {
+            width: 100%;
+            padding: 4rem 2rem;
+        }
+
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .highlight-item {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .highlight-icon {
+            font-size: 2.5rem;
+        }
+
+        .highlight-text {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Form Section */
+        .form-section {
+            width: 100%;
+            max-width: 600px;
+            margin: 4rem auto;
+            padding: 3rem;
+        }
+
+        .form-title {
+            font-family: var(--font-merienda);
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            line-height: 1.3;
+            color: var(--primary-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: var(--font-merienda);
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: var(--section-gradient);
+            color: var(--dark-bg);
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            font-family: var(--font-merienda);
+        }
+
+        .form-button:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .form-button:disabled {
+            background: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .privacy-notice {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin: 1.5rem 0;
+            opacity: 0.8;
+        }
+
+        /* Wheel Section */
+        .wheel-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* When only wheel is visible (after registration) */
+        .wheel-section.alone {
+            min-height: 100vh;
+            padding: 2rem;
+            padding-bottom: 120px; /* Space for fixed footer */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .wheel-section.alone .wheel-container {
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .wheel-section.alone .wheel {
+            height: 300px;
+            margin-bottom: 3rem;
+        }
+
+        .wheel-section.alone .wheel-button {
+            font-size: 1.5rem;
+            padding: 1.5rem 3rem;
+            margin-top: 3rem;
+        }
+
+        .wheel-title {
+            font-family: var(--font-merienda);
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(45deg, #fff, #ccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .wheel-subtitle {
+            font-family: var(--font-dancing);
+            font-size: 2rem;
+            font-weight: 600;
+            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 3rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .prize-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            padding: 0 1rem;
+        }
+
+        .prize-item {
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prize-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .prize-item:hover::before {
+            transform: translateX(100%);
+        }
+
+        .prize-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .prize-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .prize-name {
+            font-family: var(--font-merienda);
+            font-size: 1.8rem;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 0.8rem;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .prize-description {
+            font-family: var(--font-merienda);
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.4;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .prize-value {
+            font-family: var(--font-merienda);
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--success-color);
+            margin-top: 1rem;
+        }
+
+        .wheel-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .wheel-button {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+            font-family: var(--font-merienda);
+        }
+
+        .wheel-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .wheel-button:hover::before {
+            transform: translateX(100%);
+        }
+
+        .wheel-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Prize Wheel Styles */
+        .wheel {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            perspective: 1000px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .wheel-line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--primary-color), transparent);
+            z-index: 10;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            pointer-events: none;
+        }
+
+        .wheel-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid var(--primary-color);
+        }
+
+        .wheel-items {
+            display: flex;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            will-change: transform;
+            transform-style: preserve-3d;
+        }
+
+        .wheel-item {
+            min-width: 180px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            font-weight: 600;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            gap: 1rem;
+        }
+
+        .wheel-item img {
+            width: 200px;
+            height: 150px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem;
+            aspect-ratio: 1/1;
+        }
+
+        .wheel-item-text {
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .wheel-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+            border-color: var(--primary-color);
+        }
+
+        .wheel-item.active img {
+            border: 2px solid var(--primary-color);
+        }
+
+        .wheel-item.winning {
+            animation: winningPulse 1.5s ease-in-out infinite;
+            background: rgba(255, 255, 255, 0.2) !important;
+            border: 2px solid var(--primary-color) !important;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            z-index: 5;
+        }
+
+        .wheel-item.winning img {
+            border: 2px solid var(--primary-color);
+            animation: glow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes winningPulse {
+            0% { 
+                transform: scale(1.1);
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            }
+            50% { 
+                transform: scale(1.15);
+                box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+            }
+            100% { 
+                transform: scale(1.1);
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+            50% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
+            100% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+        }
+
+        /* Footer Section */
+        .footer {
+            /* width: 100%;
+            padding: 4rem 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.2); */
+            position: relative;
+            z-index: 10;
+        }
+
+        /* When only wheel is visible, footer should be at bottom */
+        .wheel-section.alone + .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            z-index: 100;
+        }
+
+        .wheel-section.alone + .footer .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .wheel-section.alone + .footer .social-links {
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .wheel-section.alone + .footer .footer-text {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            color: var(--text-light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            padding: 1rem;
+        }
+
+        .social-link:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .social-icon {
+            font-size: 1.4rem;
+        }
+
+        .footer-text {
+            color: var(--text-light);
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-top: 2rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: modalAppear 0.5s ease-out;
+        }
+
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes prizeGlow {
+            0% { 
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+                border-color: rgba(255, 255, 255, 0.3);
+            }
+            50% { 
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+                border-color: rgba(255, 255, 255, 0.6);
+            }
+            100% { 
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+                border-color: rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        @keyframes prizeBounce {
+            0%, 100% { 
+                transform: translateY(0);
+            }
+            50% { 
+                transform: translateY(-5px);
+            }
+        }
+
+        .modal-title {
+            font-family: var(--font-merienda);
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            line-height: 1.3;
+            color: var(--primary-color);
+        }
+
+        .modal-message h3 {
+            font-family: var(--font-merienda);
+            font-size: 2.2rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .modal-message p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+        }
+
+        .modal-button {
+            padding: 1rem 2rem;
+            background: var(--primary-color);
+            color: var(--dark-bg);
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            font-family: var(--font-merienda);
+        }
+
+        .modal-button:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+        /* Modal prize image styles */
+        .modal-prize-image {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem;
+            aspect-ratio: 1/1;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .modal-prize-container {
+            display: inline-block;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: prizeGlow 2s ease-in-out infinite;
+            width: 170px;
+            height: 170px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-title {
+                font-size: 3.5rem;
+            }
+
+            .countdown-title {
+                font-size: 2.8rem;
+                text-align: center;
+            }
+
+            .wheel-title {
+                font-size: 3rem;
+            }
+
+            .form-title {
+                font-size: 2.5rem;
+            }
+
+            .countdown-item .countdown-number {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem;
+                margin-bottom: 0.8rem;
+                line-height: 1.2;
+            }
+
+            .countdown-title {
+                font-size: 2rem;
+                margin-bottom: 1.5rem;
+                line-height: 1.2;
+            }
+
+            .wheel-title {
+                font-size: 2rem;
+                margin-bottom: 0.8rem;
+                line-height: 1.2;
+            }
+
+            .wheel-subtitle {
+                font-size: 1.4rem;
+                margin-bottom: 1.5rem;
+                line-height: 1.3;
+            }
+
+            .form-title {
+                font-size: 1.8rem;
+                margin-bottom: 1.5rem;
+                line-height: 1.2;
+            }
+            .countdown {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+}
+
+            .countdown-item .countdown-number {
+                font-size: 2rem;
+                line-height: 1;
+            }
+
+            .countdown-item .countdown-label {
+                font-size: 0.9rem;
+                letter-spacing: 0.5px;
+            }
+
+            .form-label {
+                font-size: 1rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .form-input {
+                font-size: 0.95rem;
+                padding: 0.8rem;
+            }
+
+            .form-button, .wheel-button, .modal-button {
+                font-size: 1rem;
+                padding: 0.8rem 1.5rem;
+            }
+
+            .prize-name {
+                font-size: 1.3rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .prize-description {
+                font-size: 0.95rem;
+                line-height: 1.4;
+                margin-bottom: 0.5rem;
+            }
+
+            .prize-value {
+                font-size: 1.1rem;
+            }
+
+            .modal-title {
+                font-size: 1.8rem;
+                margin-bottom: 1rem;
+            }
+
+            .modal-message h3 {
+                font-size: 1.4rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .modal-message p {
+                font-size: 0.95rem;
+                line-height: 1.4;
+                margin-bottom: 0.8rem;
+            }
+
+            .presentation-content p {
+                font-size: 0.95rem;
+                line-height: 1.5;
+                margin-bottom: 1rem;
+            }
+
+            .countdown-item {
+                min-width: 80px;
+                padding: 0.8rem;
+            }
+
+            .wheel-container {
+                padding: 1.5rem;
+            }
+
+            .form-container {
+                padding: 1.5rem;
+            }
+
+            .prize-grid {
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .prize-item {
+                padding: 1rem;
+            }
+
+            .prize-icon {
+                font-size: 1.8rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .wheel {
+                height: 200px;
+            }
+
+            .wheel-item {
+                min-width: 150px;
+                padding: 1rem;
+            }
+
+            .wheel-item img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .wheel-button {
+                width: 200px;
+                padding: 1rem 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.8rem;
+                letter-spacing: 0.3px;
+            }
+
+            .countdown-title {
+                font-size: 1.6rem;
+                margin-bottom: 1rem;
+            }
+
+            .wheel-title {
+                font-size: 1.6rem;
+                margin-bottom: 0.6rem;
+            }
+
+            .wheel-subtitle {
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+            }
+
+            .form-title {
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .countdown-item .countdown-number {
+                font-size: 1.6rem;
+            }
+
+            .countdown-item .countdown-label {
+                font-size: 0.8rem;
+            }
+
+            .form-label {
+                font-size: 0.9rem;
+                margin-bottom: 0.4rem;
+            }
+
+            .form-input {
+                font-size: 0.9rem;
+                padding: 0.7rem;
+            }
+
+            .form-button, .wheel-button, .modal-button {
+                font-size: 0.95rem;
+                padding: 0.7rem 1.2rem;
+            }
+
+            .prize-name {
+                font-size: 1.1rem;
+            }
+
+            .prize-description {
+                font-size: 0.85rem;
+                margin-bottom: 0.4rem;
+            }
+
+            .prize-value {
+                font-size: 1rem;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .modal-message h3 {
+                font-size: 1.2rem;
+                margin-bottom: 0.6rem;
+            }
+
+            .modal-message p {
+                font-size: 0.9rem;
+                margin-bottom: 0.6rem;
+            }
+
+            .presentation-content p {
+                font-size: 0.9rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .countdown-item {
+                min-width: 70px;
+                padding: 0.6rem;
+            }
+
+            .wheel-container {
+                padding: 1rem;
+            }
+
+            .form-container {
+                padding: 1rem;
+            }
+
+            .prize-grid {
+                gap: 0.8rem;
+                padding: 0.8rem;
+            }
+
+            .prize-item {
+                padding: 0.8rem;
+            }
+
+            .prize-icon {
+                font-size: 1.5rem;
+                margin-bottom: 0.4rem;
+            }
+
+            .wheel {
+                height: 180px;
+            }
+
+            .wheel-item {
+                min-width: 120px;
+                padding: 0.8rem;
+            }
+
+            .wheel-item img {
+                width: 60px;
+                height: 60px;
+            }
+
+            .wheel-button {
+                width: 180px;
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .modal-content {
+                padding: 2rem;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+            }
+
+            .modal-message {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .hero-title {
+                font-size: 1.6rem;
+            }
+
+            .countdown-title {
+                font-size: 1.4rem;
+            }
+
+            .wheel-title {
+                font-size: 1.4rem;
+            }
+
+            .wheel-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .form-title {
+                font-size: 1.3rem;
+            }
+
+            .countdown-item .countdown-number {
+                font-size: 1.4rem;
+            }
+
+            .countdown-item .countdown-label {
+                font-size: 0.75rem;
+            }
+
+            .form-label {
+                font-size: 0.85rem;
+            }
+
+            .form-input {
+                font-size: 0.85rem;
+                padding: 0.6rem;
+            }
+
+            .form-button, .wheel-button, .modal-button {
+                font-size: 0.9rem;
+                padding: 0.6rem 1rem;
+            }
+
+            .prize-name {
+                font-size: 1rem;
+            }
+
+            .prize-description {
+                font-size: 0.8rem;
+            }
+
+            .prize-value {
+                font-size: 0.9rem;
+            }
+
+            .modal-title {
+                font-size: 1.3rem;
+            }
+
+            .modal-message h3 {
+                font-size: 1.1rem;
+            }
+
+            .modal-message p {
+                font-size: 0.85rem;
+            }
+
+            .presentation-content p {
+                font-size: 0.85rem;
+            }
+
+            .countdown-item {
+                min-width: 60px;
+                padding: 0.5rem;
+            }
+
+            .prize-grid {
+                gap: 0.6rem;
+                padding: 0.6rem;
+            }
+
+            .prize-item {
+                padding: 0.6rem;
+            }
+
+            .prize-icon {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Additional readability improvements */
+        .presentation-content {
+            max-width: 90%;
+            margin: 0 auto;
+        }
+
+        .prize-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        .prize-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .prize-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Add these new styles */
+        .audio-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .audio-control:hover {
+            transform: scale(1.1);
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .audio-control i {
+            color: var(--primary-color);
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .audio-control.muted i.fa-volume-up {
+            display: none;
+        }
+
+        .audio-control:not(.muted) i.fa-volume-mute {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <video class="video-background" autoplay loop playsinline id="backgroundVideo">
+        <source src="New Collection..mp4" type="video/mp4">
+    </video>
+
+    <div class="content-wrapper">
+        <div class="content-container">
+            <!-- Countdown Section -->
+            <section class="countdown-section">
+                <div class="countdown-title">Prepare-se para uma Audaz nunca antes vista</div>
+                <div class="countdown" id="countdown">
+                    <div class="countdown-item">
+                        <span id="days">00</span>
+                        <span class="countdown-label">Dias</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="hours">00</span>
+                        <span class="countdown-label">Horas</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="minutes">00</span>
+                        <span class="countdown-label">Minutos</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="seconds">00</span>
+                        <span class="countdown-label">Segundos</span>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h1 class="hero-title">Seu streetwear favorito, agora a um clique de distância. </h1>
+                <div class="presentation-content">
+                    <p>A AUDAZ WEAR vai além do estilo: é sobre atitude, presença e identidade. Criamos uma marca de streetwear moderna e ousada, feita para quem se veste com propósito.</p>
+                    <p>E para comemorar o lançamento da nossa loja online, preparamos algo especial: uma experiência interativa com prêmios reais, cupons, brindes e vantagens exclusivas para os primeiros a chegarem.</p>
+                    <p>Basta se cadastrar e girar a nossa Roleta AUDAZ. Mas atenção: o tempo está correndo e os prêmios são limitados!</p>
+                </div>
+            </section>
+
+              <!-- Wheel Section -->
+              <section class="wheel-section">
+                <div class="wheel-title">Prêmios Exclusivos</div>
+                <div class="wheel-subtitle">Gire a roleta e descubra qual prêmio exclusivo da Audaz Wear será seu!</div>
+                
+                <div class="prize-grid">
+                    <div class="prize-item">
+                        <div class="prize-icon">👑</div>
+                        <div class="prize-name">Coleção VIP</div>
+                        <div class="prize-description">Acesso antecipado à próxima coleção com 30% de desconto em até 3 peças</div>
+                        <!-- <div class="prize-value">Valor: R$ 1.500</div> -->
+                    </div>
+                    
+                    <div class="prize-item">
+                        <div class="prize-icon">🎁</div>
+                        <div class="prize-name">Kit Audaz</div>
+                        <div class="prize-description">Kit exclusivo com 2 peças da coleção atual + acessórios personalizados</div>
+                        <!-- <div class="prize-value">Valor: R$ 800</div> -->
+                    </div>
+                    
+                    <div class="prize-item">
+                        <div class="prize-icon">⭐</div>
+                        <div class="prize-name">Experiência Audaz</div>
+                        <div class="prize-description">Sessão de fotos exclusiva + 1 peça personalizada com seu nome</div>
+                        <!-- <div class="prize-value">Valor: R$ 1.200</div> -->
+                    </div>
+                    
+                    <div class="prize-item">
+                        <div class="prize-icon">💎</div>
+                        <div class="prize-name">Membro Black</div>
+                        <div class="prize-description">Status VIP por 1 ano com 20% de desconto em todas as compras</div>
+                        <!-- <div class="prize-value">Valor: R$ 2.000</div> -->
+                    </div>
+                </div>
+
+                <div class="wheel-container" id="wheelContainer" style="display: none;">
+                    <div class="wheel" id="wheel">
+                        <div class="wheel-line"></div>
+                        <div class="wheel-items" id="wheelItems"></div>
+                    </div>
+                    <button class="wheel-button" id="spinButton">Girar Roleta</button>
+                </div>
+            </section>
+
+
+            <!-- Highlights Section
+            <section class="highlights-section">
+                <div class="highlights-grid">
+                    <div class="highlight-item">
+                        <span class="highlight-icon">🎁</span>
+                        <span class="highlight-text">Brindes para os primeiros compradores</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-icon">🚚</span>
+                        <span class="highlight-text">Frete grátis no lançamento</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-icon">🔥</span>
+                        <span class="highlight-text">Peças limitadas e exclusivas</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-icon">🎟</span>
+                        <span class="highlight-text">Cupons de até R$50</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-icon">💥</span>
+                        <span class="highlight-text">Sorteio especial ao vivo</span>
+                    </div>
+                </div>
+            </section> -->
+          
+
+            <!-- Form Section -->
+            <section class="form-section" id="formContainer">
+                <h2 class="form-title">Cadastre-se e Gire a Roleta</h2>
+                <form id="registrationForm" class="registration-form">
+                    <div class="form-group">
+                        <label for="name">Nome completo</label>
+                        <input type="text" id="name" name="name" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Telefone</label>
+                        <input type="tel" id="phone" name="phone" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cpf">CPF (para garantir 1 giro por pessoa)</label>
+                        <input type="text" id="cpf" name="cpf" class="form-input" required>
+                    </div>
+                    <p class="privacy-notice">🔒 Seus dados serão usados apenas para validar o giro e enviar o cupom.</p>
+                    <button type="submit" class="form-button" id="submitButton" disabled>Rodar a Roleta</button>
+                </form>
+            </section>
+
+            
+                <div class="wheel-container" id="wheelContainer" style="display: none;">
+                    <div class="wheel" id="wheel">
+                        <div class="wheel-line"></div>
+                        <div class="wheel-items" id="wheelItems"></div>
+                    </div>
+                    <button class="wheel-button" id="spinButton">Girar Roleta</button>
+                </div>
+            </section>
+
+            <!-- Footer Section -->
+            <footer class="footer">
+                <div class="footer-content">
+                    <div class="social-links">
+                        <a href="https://instagram.com/audazwear" target="_blank" class="social-link">
+                            <span class="social-icon">📸</span> @audazwear
+                        </a>
+                        <a href="https://wa.me/seunumero" target="_blank" class="social-link">
+                            <span class="social-icon">💬</span> WhatsApp
+                        </a>
+                        <a href="mailto:suporte@audazwear.com" class="social-link">
+                            <span class="social-icon">✉️</span> suporte@audazwear.com
+                        </a>
+                    </div>
+                    <p class="footer-text">Siga a AUDAZ WEAR nas redes sociais e acompanhe tudo em tempo real.</p>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Audio control stays on top -->
+    <div class="audio-control" id="audioControl" style="z-index: 1000;">
+        <i class="fas fa-volume-mute"></i>
+        <i class="fas fa-volume-up"></i>
+    </div>
+
+    <!-- Modal stays on top -->
+    <div id="resultModal" class="modal" style="z-index: 1001;">
+        <div class="modal-content">
+            <h2 class="modal-title">Parabéns!</h2>
+            <p class="modal-message" id="modalMessage"></p>
+            <button class="modal-button" id="modalButton">Fechar</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Audio control functionality
+            const audioControl = document.getElementById('audioControl');
+            const video = document.getElementById('backgroundVideo');
+            
+            // Try to start with unmuted video
+            video.muted = false;
+            video.play().catch(function(error) {
+                console.log("Video play failed:", error);
+                // If autoplay with sound fails, mute the video and update UI
+                video.muted = true;
+                audioControl.classList.add('muted');
+            });
+
+            audioControl.addEventListener('click', function() {
+                if (video.muted) {
+                    video.muted = false;
+                    audioControl.classList.remove('muted');
+                    video.play().catch(function(error) {
+                        console.log("Video play failed:", error);
+                        alert('Clique em "OK" para ativar o som. Alguns navegadores exigem interação do usuário para reproduzir áudio.');
+                    });
+                } else {
+                    video.muted = true;
+                    audioControl.classList.add('muted');
+                }
+            });
+
+            // Update content visibility delay to 4 seconds
+            setTimeout(() => {
+                document.querySelector('.content-container').classList.add('visible');
+            }, 4000);
+        });
+
+        // Countdown timer
+        const launchDate = new Date('2025-06-25T20:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = launchDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Form validation and wheel functionality
+        const form = document.getElementById('registrationForm');
+        const submitButton = document.getElementById('submitButton');
+        const wheelContainer = document.getElementById('wheelContainer');
+        const spinButton = document.getElementById('spinButton');
+        const inputs = form.querySelectorAll('input');
+
+        function validateForm() {
+            const allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+            submitButton.disabled = !allFilled;
+        }
+
+        inputs.forEach(input => {
+            input.addEventListener('input', validateForm);
+        });
+
+        // CPF Mask
+        const cpfInput = document.getElementById('cpf');
+        cpfInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 11) {
+                value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+                e.target.value = value;
+            }
+        });
+
+        // Phone Mask
+        const phoneInput = document.getElementById('phone');
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 11) {
+                value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+                e.target.value = value;
+            }
+        });
+
+        // Wheel functionality
+        const prizes = [
+            { text: 'Bolsa Audaz', image: 'Bolsa.png' },
+            { text: 'Bone Audaz', image: 'Bone.png' },
+            { text: 'Camisa Audaz', image: 'Camisa.png' },
+            { text: 'Blusa Audaz', image: 'Blusa.png' }
+        ];
+
+        function initializeWheel() {
+            const wheelItems = document.getElementById('wheelItems');
+            wheelItems.innerHTML = '';
+
+            const numDisplayItems = prizes.length * 200;
+            const allItemsForDisplay = [];
+            for (let i = 0; i < numDisplayItems; i++) {
+                allItemsForDisplay.push(prizes[i % prizes.length]);
+            }
+
+            allItemsForDisplay.forEach(prize => {
+                const item = document.createElement('div');
+                item.className = 'wheel-item';
+                
+                const img = document.createElement('img');
+                img.src = prize.image;
+                img.alt = prize.text;
+                
+                const text = document.createElement('div');
+                text.className = 'wheel-item-text';
+                text.textContent = prize.text;
+                
+                item.appendChild(img);
+                item.appendChild(text);
+                wheelItems.appendChild(item);
+            });
+
+            // Start with the first item centered
+            const containerWidth = wheelItems.parentElement.offsetWidth;
+            const ITEM_WIDTH = 180; // min-width from CSS
+            const viewportCenter = containerWidth / 2;
+            const targetItemLeftEdge = viewportCenter - (ITEM_WIDTH / 2);
+            
+            wheelItems.style.transform = `translateX(${targetItemLeftEdge}px)`;
+        }
+
+        let isSpinning = false;
+        const MIN_SPINS = 3;
+        const MAX_SPINS = 5;
+
+        submitButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Check if user already participated
+            const hasParticipated = localStorage.getItem(`participated_${cpfInput.value}`);
+            if (hasParticipated) {
+                alert('Você já participou da roleta!');
+                return;
+            }
+
+            // Hide all sections except wheel and footer
+            const sectionsToHide = [
+                document.querySelector('.countdown-section'),
+                document.querySelector('.hero-section'),
+                document.querySelector('.presentation-section'),
+                document.querySelector('.highlights-section'),
+                document.querySelector('.form-section')
+            ];
+            
+            sectionsToHide.forEach(section => {
+                if (section) {
+                    section.style.transition = 'opacity 0.5s ease-out';
+                    section.style.opacity = '0';
+                    setTimeout(() => {
+                        section.style.display = 'none';
+                    }, 500);
+                }
+            });
+
+            // Hide prize grid and titles in wheel section
+            const wheelSection = document.querySelector('.wheel-section');
+            const prizeGrid = wheelSection.querySelector('.prize-grid');
+            const wheelTitle = wheelSection.querySelector('.wheel-title');
+            const wheelSubtitle = wheelSection.querySelector('.wheel-subtitle');
+            
+            if (prizeGrid) {
+                prizeGrid.style.transition = 'opacity 0.5s ease-out';
+                prizeGrid.style.opacity = '0';
+                setTimeout(() => {
+                    prizeGrid.style.display = 'none';
+                }, 500);
+            }
+            
+            if (wheelTitle) {
+                wheelTitle.style.transition = 'opacity 0.5s ease-out';
+                wheelTitle.style.opacity = '0';
+                setTimeout(() => {
+                    wheelTitle.style.display = 'none';
+                }, 500);
+            }
+            
+            if (wheelSubtitle) {
+                wheelSubtitle.style.transition = 'opacity 0.5s ease-out';
+                wheelSubtitle.style.opacity = '0';
+                setTimeout(() => {
+                    wheelSubtitle.style.display = 'none';
+                }, 500);
+            }
+            
+            // Add alone class to wheel section
+            setTimeout(() => {
+                wheelSection.classList.add('alone');
+            }, 600);
+            
+            // Show wheel and enable spin button
+            wheelContainer.style.display = 'block';
+            wheelContainer.style.opacity = '0';
+            setTimeout(() => {
+                wheelContainer.style.transition = 'opacity 0.5s ease-in';
+                wheelContainer.style.opacity = '1';
+            }, 100);
+            submitButton.disabled = true;
+
+            // Initialize wheel
+            initializeWheel();
+        });
+
+        // Modal functionality
+        function showPrizeModal(prize) {
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px);';
+            modal.innerHTML = `
+                <div class="modal-content" style="background: linear-gradient(135deg, #1a1a1a, #2a2a2a); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 2rem; text-align: center; max-width: 400px; width: 90%; position: relative;">
+                    <button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;">×</button>
+                    <div style="background: rgba(255, 255, 255, 0.1); padding: 2rem; border-radius: 15px; margin: 1rem 0; border: 1px solid rgba(255, 255, 255, 0.2);">
+                        <div style="margin-bottom: 1.5rem;">
+                            <div class="modal-prize-container">
+                                <img src="${prize.image}" alt="${prize.text}" class="modal-prize-image">
+                            </div>
+                        </div>
+                        <div style="font-size: 1.8rem; font-weight: bold; color: #fff; margin-bottom: 0.8rem; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);">
+                            ${prize.text}
+                        </div>
+                        <div style="font-size: 1.1rem; color: rgba(255, 255, 255, 0.9); margin-bottom: 0.5rem;">
+                            🎁 Seu prêmio será enviado por e-mail!
+                        </div>
+                        <div style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7);">
+                            📧 Verifique sua caixa de entrada
+                        </div>
+                    </div>
+                    <div style="font-size: 1rem; color: rgba(255, 255, 255, 0.8); margin-top: 1.5rem; font-style: italic;">
+                        Obrigado por participar do lançamento da AUDAZ WEAR! 🚀
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function closeModal() {
+            document.getElementById('resultModal').style.display = 'none';
+            spinButton.disabled = false;
+        }
+
+        // Spin wheel function
+        function spinWheel() {
+            if (isSpinning) return;
+            isSpinning = true;
+
+            const wheelItems = document.getElementById('wheelItems');
+            const items = wheelItems.children;
+            const ITEM_WIDTH = items[0].offsetWidth;
+            const containerWidth = wheelItems.parentElement.offsetWidth;
+            
+            const totalUniquePrizes = prizes.length;
+            const prizeIndex = Math.floor(Math.random() * totalUniquePrizes);
+            const numFullRevolutions = MIN_SPINS + Math.floor(Math.random() * (MAX_SPINS - MIN_SPINS + 1));
+            const spinBufferCycles = 10;
+            
+            const currentTransform = wheelItems.style.transform;
+            const currentTranslateX = parseFloat(currentTransform.replace('translateX(', '').replace('px)', '')) || 0;
+            
+            // Calculate the target position so that the winning item is centered
+            const viewportCenter = containerWidth / 2;
+            const targetItemCenterX = viewportCenter;
+            const targetItemLeftEdge = targetItemCenterX - (ITEM_WIDTH / 2);
+            
+            // Calculate how many items we need to move to get the winning item to the center
+            const currentItemAtLeftEdge = Math.floor(Math.abs(currentTranslateX) / ITEM_WIDTH);
+            const targetItemAbsoluteIndex = currentItemAtLeftEdge + 
+                                          (numFullRevolutions * totalUniquePrizes) + 
+                                          prizeIndex + 
+                                          (spinBufferCycles * totalUniquePrizes);
+            
+            const finalTargetTranslateX = -targetItemAbsoluteIndex * ITEM_WIDTH + targetItemLeftEdge;
+            const distanceToAnimate = finalTargetTranslateX - currentTranslateX;
+
+            let startTime = null;
+            const duration = 8000;
+
+            function casinoEase(t) {
+                return 1 - Math.pow(1 - t, 5);
+            }
+
+            function animate(currentTime) {
+                if (!startTime) startTime = currentTime;
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const easedProgress = casinoEase(progress);
+                const newTranslateX = currentTranslateX + (distanceToAnimate * easedProgress);
+                wheelItems.style.transform = `translateX(${newTranslateX}px)`;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    isSpinning = false;
+                    const wonPrize = prizes[prizeIndex];
+                    wheelItems.style.transform = `translateX(${finalTargetTranslateX}px)`;
+                    
+                    // Find the winning item element
+                    const winningItemElement = items[targetItemAbsoluteIndex];
+                    if (winningItemElement) {
+                        winningItemElement.classList.add('winning');
+                    }
+                    
+                    setTimeout(() => {
+                        showPrizeModal(wonPrize);
+                        if (winningItemElement) {
+                            winningItemElement.classList.remove('winning');
+                        }
+                        spinButton.disabled = false;
+                    }, 1000);
+                    
+                    // Save participation
+                    localStorage.setItem(`participated_${cpfInput.value}`, 'true');
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // Event listeners
+        document.getElementById('spinButton').addEventListener('click', spinWheel);
+        document.getElementById('modalButton').addEventListener('click', closeModal);
+    </script>
+</body>
+</html>
