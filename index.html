@@ -671,8 +671,8 @@
         }
 
         .wheel-item img {
-            width: 120px;
-            height: 120px;
+            width: 50px;
+            height: 50px;
             object-fit: contain;
             border-radius: 10px;
             background: rgba(255, 255, 255, 0.1);
@@ -1097,7 +1097,7 @@
             }
 
             .wheel {
-                height: 200px;
+                height: 160px;
             }
 
             .wheel-item {
@@ -1106,8 +1106,8 @@
             }
 
             .wheel-item img {
-                width: 80px;
-                height: 80px;
+                width: 50px;
+                height: 50px;
             }
 
             .wheel-button {
@@ -1226,7 +1226,7 @@
             }
 
             .wheel {
-                height: 180px;
+                height: 140px;
             }
 
             .wheel-item {
@@ -1235,8 +1235,8 @@
             }
 
             .wheel-item img {
-                width: 60px;
-                height: 60px;
+                width: 50px;
+                height: 50px;
             }
 
             .wheel-button {
@@ -1345,6 +1345,20 @@
 
             .prize-icon {
                 font-size: 1.3rem;
+            }
+
+            .wheel {
+                height: 120px;
+            }
+
+            .wheel-item {
+                min-width: 100px;
+                padding: 0.6rem;
+            }
+
+            .wheel-item img {
+                width: 50px;
+                height: 50px;
             }
         }
 
@@ -1732,7 +1746,8 @@
 
             // Start with the first item centered
             const containerWidth = wheelItems.parentElement.offsetWidth;
-            const ITEM_WIDTH = 180; // min-width from CSS
+            const firstItem = wheelItems.children[0];
+            const ITEM_WIDTH = firstItem ? firstItem.offsetWidth : 180; // Use actual width or fallback
             const viewportCenter = containerWidth / 2;
             const targetItemLeftEdge = viewportCenter - (ITEM_WIDTH / 2);
             
@@ -1869,8 +1884,7 @@
             
             // Calculate the target position so that the winning item is centered
             const viewportCenter = containerWidth / 2;
-            const targetItemCenterX = viewportCenter;
-            const targetItemLeftEdge = targetItemCenterX - (ITEM_WIDTH / 2);
+            const targetItemLeftEdge = viewportCenter - (ITEM_WIDTH / 2);
             
             // Calculate how many items we need to move to get the winning item to the center
             const currentItemAtLeftEdge = Math.floor(Math.abs(currentTranslateX) / ITEM_WIDTH);
@@ -1902,11 +1916,16 @@
                     requestAnimationFrame(animate);
                 } else {
                     isSpinning = false;
-                    const wonPrize = prizes[prizeIndex];
                     wheelItems.style.transform = `translateX(${finalTargetTranslateX}px)`;
                     
+                    // Calculate which item is actually at the center (line position)
+                    const finalTranslateX = finalTargetTranslateX;
+                    const itemAtCenterIndex = Math.floor(Math.abs(finalTranslateX) / ITEM_WIDTH);
+                    const actualPrizeIndex = itemAtCenterIndex % totalUniquePrizes;
+                    const wonPrize = prizes[actualPrizeIndex];
+                    
                     // Find the winning item element
-                    const winningItemElement = items[targetItemAbsoluteIndex];
+                    const winningItemElement = items[itemAtCenterIndex];
                     if (winningItemElement) {
                         winningItemElement.classList.add('winning');
                     }
