@@ -455,7 +455,7 @@
         }
 
         .wheel-section.alone .wheel {
-            height: 300px;
+            height: 200px;
             margin-bottom: 3rem;
         }
 
@@ -463,6 +463,12 @@
             font-size: 1.5rem;
             padding: 1.5rem 3rem;
             margin-top: 3rem;
+            color: white;
+        }
+
+        .wheel-section.alone .wheel-item img {
+            width: 100px;
+            height: 100px;
         }
 
         .wheel-title {
@@ -675,7 +681,7 @@
             height: 50px;
             object-fit: contain;
             border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
+            /* background: rgba(255, 255, 255, 0.1); */
             padding: 0.5rem;
             aspect-ratio: 1/1;
         }
@@ -821,7 +827,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+             background: rgba(0, 0, 0, 0.4); 
             backdrop-filter: blur(10px);
             z-index: 1000;
             justify-content: center;
@@ -829,7 +835,7 @@
         }
 
         .modal-content {
-            background: rgba(0, 0, 0, 0.95);
+            /* background: rgba(0, 0, 0, 0.95); */
             padding: 3rem;
             border-radius: 20px;
             text-align: center;
@@ -922,8 +928,8 @@
 
         /* Modal prize image styles */
         .modal-prize-image {
-            width: 150px;
-            height: 150px;
+            width: 250px;
+            height: 250px;
             object-fit: contain;
             border-radius: 10px;
             background: rgba(255, 255, 255, 0.1);
@@ -933,7 +939,9 @@
         }
 
         .modal-prize-container {
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 1rem;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
@@ -941,9 +949,7 @@
             animation: prizeGlow 2s ease-in-out infinite;
             width: 170px;
             height: 170px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin: 0 auto;
         }
 
         /* Responsive Design */
@@ -1106,13 +1112,40 @@
             }
 
             .wheel-item img {
-                width: 50px;
-                height: 50px;
+                width: 80px;
+                height: 80px;
             }
 
             .wheel-button {
                 width: 200px;
                 padding: 1rem 2rem;
+            }
+
+            /* Ajustes para roleta sozinha no mobile */
+            .wheel-section.alone .wheel {
+                height: 200px;
+                margin-bottom: 2rem;
+            }
+
+            .wheel-section.alone .wheel-item img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .wheel-section.alone .wheel-button {
+                font-size: 1.2rem;
+                padding: 1rem 2rem;
+                margin-top: 2rem;
+            }
+
+            .modal-prize-container {
+                width: 200px;
+                height: 200px;
+            }
+
+            .modal-prize-image {
+                width: 200px;
+                height: 200px;
             }
         }
 
@@ -1235,8 +1268,8 @@
             }
 
             .wheel-item img {
-                width: 50px;
-                height: 50px;
+                width: 60px;
+                height: 60px;
             }
 
             .wheel-button {
@@ -1255,6 +1288,33 @@
 
             .modal-message {
                 font-size: 1rem;
+            }
+
+            /* Ajustes para roleta sozinha no mobile pequeno */
+            .wheel-section.alone .wheel {
+                height: 200px;
+                margin-bottom: 1.5rem;
+            }
+
+            .wheel-section.alone .wheel-item img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .wheel-section.alone .wheel-button {
+                font-size: 1rem;
+                padding: 0.8rem 1.5rem;
+                margin-top: 1.5rem;
+            }
+
+            .modal-prize-container {
+                width: 200px;
+                height: 200px;
+            }
+
+            .modal-prize-image {
+                width: 100px;
+                height: 100px;
             }
         }
 
@@ -1360,6 +1420,33 @@
                 width: 50px;
                 height: 50px;
             }
+
+            /* Ajustes para roleta sozinha no mobile muito pequeno */
+            .wheel-section.alone .wheel {
+                height: 200px;
+                margin-bottom: 1rem;
+            }
+
+            .wheel-section.alone .wheel-item img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .wheel-section.alone .wheel-button {
+                font-size: 0.9rem;
+                padding: 0.6rem 1rem;
+                margin-top: 1rem;
+            }
+
+            .modal-prize-container {
+                width: 150px;
+                height: 150px;
+            }
+
+            .modal-prize-image {
+                width: 150px;
+                height: 150px;
+            }
         }
 
         /* Additional readability improvements */
@@ -1435,7 +1522,7 @@
     </style>
 </head>
 <body>
-    <video class="video-background" autoplay loop playsinline muted id="backgroundVideo">
+    <video class="video-background" autoplay loop id="backgroundVideo">
         <source src="video.mp4" type="video/mp4">
     </video>
 
@@ -1751,6 +1838,7 @@
             const viewportCenter = containerWidth / 2;
             const targetItemLeftEdge = viewportCenter - (ITEM_WIDTH / 2);
             
+            // Position the first item so its center aligns with the line
             wheelItems.style.transform = `translateX(${targetItemLeftEdge}px)`;
         }
 
@@ -1843,13 +1931,12 @@
             // Create a more detailed modal content with prize image
             message.innerHTML = `
                 <div style="text-align: center; padding: 1rem;">
-                    <div style="background: rgba(255, 255, 255, 0.1); padding: 2rem; border-radius: 15px; margin: 1rem 0; border: 1px solid rgba(255, 255, 255, 0.2);">
+                    <div style=" padding: 2rem; border-radius: 15px; margin: 1rem 0; ">
                         <div style="margin-bottom: 1.5rem;">
                             <div class="modal-prize-container">
                                 <img src="${prize.image}" alt="${prize.text}" class="modal-prize-image">
                             </div>
                         </div>
-                        <h3 style="color: #fff; margin-bottom: 1rem;">Parabéns!</h3>
                         <p style="color: #fff; font-size: 1.2rem;">Você ganhou:</p>
                         <p style="color: #fff; font-size: 1.5rem; font-weight: bold; margin-top: 0.5rem;">${prize.text}</p>
                     </div>
@@ -1918,14 +2005,36 @@
                     isSpinning = false;
                     wheelItems.style.transform = `translateX(${finalTargetTranslateX}px)`;
                     
-                    // Calculate which item is actually at the center (line position)
-                    const finalTranslateX = finalTargetTranslateX;
-                    const itemAtCenterIndex = Math.floor(Math.abs(finalTranslateX) / ITEM_WIDTH);
-                    const actualPrizeIndex = itemAtCenterIndex % totalUniquePrizes;
+                    const linePosition = containerWidth / 2; // Center of container
+                    let closestItemIndex = 0;
+                    let minDistance = Infinity;
+
+                    for (let i = 0; i < items.length; i++) {
+                        const itemCenterAbsoluteX = finalTargetTranslateX + (i * ITEM_WIDTH) + (ITEM_WIDTH / 2);
+                        const distance = Math.abs(itemCenterAbsoluteX - linePosition);
+
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            closestItemIndex = i;
+                        }
+                    }
+                    
+                    // Get the actual prize index (accounting for the repeating pattern)
+                    const actualPrizeIndex = closestItemIndex % totalUniquePrizes;
                     const wonPrize = prizes[actualPrizeIndex];
                     
+                    // Debug: Log the calculation
+                    console.log('Debug Info (New Logic):', {
+                        linePosition,
+                        finalTargetTranslateX,
+                        ITEM_WIDTH,
+                        closestItemIndex,
+                        actualPrizeIndex,
+                        wonPrize: wonPrize.text
+                    });
+                    
                     // Find the winning item element
-                    const winningItemElement = items[itemAtCenterIndex];
+                    const winningItemElement = items[closestItemIndex];
                     if (winningItemElement) {
                         winningItemElement.classList.add('winning');
                     }
