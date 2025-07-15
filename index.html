@@ -1526,6 +1526,16 @@
         <source src="video.mp4" type="video/mp4">
     </video>
 
+    <div id="audioOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+      <span id="audioOverlayText" style="font-family: 'Montserrat', sans-serif; font-size:2rem; color:#19c34a; font-weight:700; letter-spacing:1px; animation: pulse 1.2s infinite alternate;">Está pronto? <u>Clique aqui</u></span>
+    </div>
+    <style>
+      @keyframes pulse {
+        0% { opacity: 1; transform: scale(1); }
+        100% { opacity: 0.7; transform: scale(1.07); }
+      }
+    </style>
+
     <div class="content-wrapper">
         <div class="content-container">
             <!-- Countdown Section -->
@@ -1606,17 +1616,21 @@
             // Audio control functionality
             const audioControl = document.getElementById('audioControl');
             const video = document.getElementById('backgroundVideo');
+            const overlay = document.getElementById('audioOverlay');
             
             // Garante que o vídeo começa mutado e rodando
             video.muted = true;
             video.play().catch(() => {});
-            // Ao toque, só remove o mute (NÃO chame play de novo!)
-            document.body.addEventListener('click', function() {
+            // Overlay animado para ativar áudio
+            function enableAudio() {
                 if (video.muted) {
                     video.muted = false;
                     audioControl.classList.remove('muted');
                 }
-            }, { once: true });
+                overlay.style.display = 'none';
+            }
+            overlay.addEventListener('click', enableAudio);
+            document.body.addEventListener('click', enableAudio, { once: true });
 
             audioControl.addEventListener('click', function() {
                 if (video.muted) {
