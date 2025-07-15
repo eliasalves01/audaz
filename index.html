@@ -1526,8 +1526,6 @@
         <source src="video.mp4" type="video/mp4">
     </video>
 
-    <div id="audioOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;background:rgba(0,0,0,0.85);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.5rem;cursor:pointer;">Toque para ativar o som</div>
-
     <div class="content-wrapper">
         <div class="content-container">
             <!-- Countdown Section -->
@@ -1611,7 +1609,6 @@
             
             // Try to start with unmuted video
             video.muted = false;
-            audioControl.classList.remove('muted');
             video.play().catch(function(error) {
                 console.log("Video play failed:", error);
                 // If autoplay with sound fails, mute the video and update UI
@@ -2031,17 +2028,6 @@
                     video.play();
                 }
             });
-
-            // Overlay para ativar áudio no mobile
-            const overlay = document.getElementById('audioOverlay');
-            function enableAudio() {
-                video.muted = false;
-                video.play();
-                overlay.style.display = 'none';
-                audioControl.classList.remove('muted');
-            }
-            overlay.addEventListener('click', enableAudio);
-            document.body.addEventListener('touchstart', enableAudio, { once: true });
         });
     </script>
 </body>
