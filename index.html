@@ -1529,7 +1529,12 @@
     <div id="audioOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;cursor:pointer;">
       <div style="background:rgba(20,20,20,0.95);padding:2.5rem 1.5rem;border-radius:2rem;box-shadow:0 8px 32px rgba(0,0,0,0.4);display:flex;flex-direction:column;align-items:center;max-width:90vw;">
         <span style="font-family:'Montserrat',sans-serif;font-size:2.2rem;font-weight:800;color:#fff;letter-spacing:1px;text-align:center;line-height:1.2;">Está pronto?</span>
-        <span style="font-family:'Montserrat',sans-serif;font-size:1.4rem;font-weight:600;color:#19c34a;letter-spacing:1px;text-align:center;margin-top:1.2rem;animation:pulse 1.2s infinite alternate;">Clique aqui</span>
+        <span style="display:flex;align-items:center;justify-content:center;margin-top:1.2rem;">
+          <svg id="clickIcon" width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:pulse 1.2s infinite alternate;">
+            <path d="M30 50c-1.1 0-2-.9-2-2V18a2 2 0 1 1 4 0v30c0 1.1-.9 2-2 2zm-8-8c-1.1 0-2-.9-2-2V28a2 2 0 1 1 4 0v12c0 1.1-.9 2-2 2zm16 0c-1.1 0-2-.9-2-2V28a2 2 0 1 1 4 0v12c0 1.1-.9 2-2 2zm-8 8c-7.7 0-14-6.3-14-14h4c0 5.5 4.5 10 10 10s10-4.5 10-10h4c0 7.7-6.3 14-14 14z" fill="#19c34a"/>
+            <path d="M30 10a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 0v4m0-4l2.83 2.83M30 10l-2.83 2.83" stroke="#19c34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
       </div>
     </div>
     <style>
