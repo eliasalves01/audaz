@@ -1624,6 +1624,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Travar rolagem enquanto overlay está visível
+            document.body.style.overflow = 'hidden';
             // Audio control functionality
             const audioControl = document.getElementById('audioControl');
             const video = document.getElementById('backgroundVideo');
@@ -1638,6 +1640,7 @@
                     audioControl.classList.remove('muted');
                 }
                 overlay.style.display = 'none';
+                document.body.style.overflow = '';
             });
 
             audioControl.addEventListener('click', function() {
