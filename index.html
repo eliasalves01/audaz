@@ -1527,7 +1527,7 @@
     </video>
 
     <div id="audioOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;cursor:pointer;">
-      <span id="audioOverlayText" style="font-family: 'Montserrat', sans-serif; font-size:2rem; color:#19c34a; font-weight:700; letter-spacing:1px; animation: pulse 1.2s infinite alternate;">Está pronto? <u>Clique aqui</u></span>
+      <span style="font-family: 'Montserrat', sans-serif; font-size:2rem; color:#19c34a; font-weight:700; letter-spacing:1px; animation: pulse 1.2s infinite alternate;">Está pronto? <u>Clique aqui</u></span>
     </div>
     <style>
       @keyframes pulse {
@@ -1617,20 +1617,17 @@
             const audioControl = document.getElementById('audioControl');
             const video = document.getElementById('backgroundVideo');
             const overlay = document.getElementById('audioOverlay');
-            
             // Garante que o vídeo começa mutado e rodando
             video.muted = true;
             video.play().catch(() => {});
             // Overlay animado para ativar áudio
-            function enableAudio() {
+            overlay.addEventListener('click', function() {
                 if (video.muted) {
                     video.muted = false;
                     audioControl.classList.remove('muted');
                 }
                 overlay.style.display = 'none';
-            }
-            overlay.addEventListener('click', enableAudio);
-            document.body.addEventListener('click', enableAudio, { once: true });
+            });
 
             audioControl.addEventListener('click', function() {
                 if (video.muted) {
