@@ -1522,7 +1522,7 @@
     </style>
 </head>
 <body>
-    <video class="video-background" autoplay loop id="backgroundVideo">
+    <video class="video-background" autoplay loop muted playsinline id="backgroundVideo">
         <source src="video.mp4" type="video/mp4">
     </video>
 
@@ -1607,23 +1607,14 @@
             const audioControl = document.getElementById('audioControl');
             const video = document.getElementById('backgroundVideo');
             
-            // Try to start with unmuted video
-            video.muted = false;
-            video.play().catch(function(error) {
-                console.log("Video play failed:", error);
-                // If autoplay with sound fails, mute the video and update UI
-                video.muted = true;
-                audioControl.classList.add('muted');
-            });
-
-            // Ao clicar em qualquer lugar da tela, tentar ativar o som
+            // Garante que o vídeo começa mutado e rodando
+            video.muted = true;
+            video.play().catch(() => {});
+            // Ao toque, só remove o mute (NÃO chame play de novo!)
             document.body.addEventListener('click', function() {
                 if (video.muted) {
                     video.muted = false;
                     audioControl.classList.remove('muted');
-                    video.play().catch(function(error) {
-                        console.log("Video play failed:", error);
-                    });
                 }
             }, { once: true });
 
